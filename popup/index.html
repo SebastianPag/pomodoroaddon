@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" href="./pomodoro.css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    </head>
+
+    <body class="body">
+        <div class="time-setting">
+            <div><button class="control" id="increase-focus">+</button></div><div><button class="control" id="decrease-focus">-</button></div>
+            <div><button class="control" id="increase-rest">+</button></div><div><button class="control" id="decrease-rest">-</button></div>
+        </div>
+        <div class="pomodoro-time">
+            <div class="work-time" id="focus-time">25:00</div>
+            <div class="pause-time" id="rest-time" style="text-align: right;">5:00</div>
+        </div>
+        <div class="pomodoro-control">
+            <div><button class="glyphicon glyphicon-play-circle" id="start"></button></div>
+            <div><button class="glyphicon glyphicon-pause" id="stop"></button></div>
+            <div><button class="glyphicon glyphicon-refresh" id="reset"></button></div>
+        </div>
+        
+        
+        <div class="calender">
+            <div class="left-arrow" id="left-arrow"><span class="glyphicon glyphicon-menu-left"></span></div>
+
+            <div id="grid-container">
+            </div>
+
+            <div class="right-arrow" id="right-arrow"><span class="glyphicon glyphicon-menu-right"></span></div>
+        </div>
+        <div id="display-date">Hello</div>
+    </body>
+    
+    <script src="./time.js"></script>
+    <script src="./pomodoro-control.js"></script>
+</html>
