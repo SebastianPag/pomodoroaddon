@@ -1,0 +1,32 @@
+{
+
+    "manifest_version": 2,
+    "name": "Pomodoro",
+    "version": "1.0",
+    "description": "personalized Pomodoro tracker",
+  
+    "icons": {
+      "48": "icon/matunus48.png",
+      "96": "icon/matunus96.png"
+    },
+      
+    "background": {
+      "scripts": ["background.js"]
+    },
+
+    "permissions": [
+      "tabs",
+      "storage",
+      "http://*/*",
+      "https://*/*"
+    ],
+
+
+    "browser_action": {
+      "default_icon": "icon/matunus_bw.png",
+      "default_title": "Pomodoro",
+      "default_popup": "popup/index.html"
+    }
+  
+  
+}
