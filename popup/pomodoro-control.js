@@ -88,13 +88,13 @@ document.getElementById("start").addEventListener("click", function(){
         if(time_in_sec <= 0){
             clearInterval(downloadTimer);
             icon_blink();
-            pause_timer();
+            rest_timer();
         }
     }, 1000);
   });
 
 
-  function pause_timer(){
+  function rest_timer(){
     var timeleft = document.getElementById("rest-time").innerHTML.split(":");
     var time_in_sec = parseInt(timeleft[0]) * 60 + parseInt(timeleft[1]);
 
@@ -108,11 +108,16 @@ document.getElementById("start").addEventListener("click", function(){
         };
 
         var minutes_secs = Math.floor(time_in_sec/60).toString() + ":" + secs.toString();
-        document.getElementById("rest-time").innerHTML = minutes_secs;
+        if(time_in_sec >= 0){
+            document.getElementById("rest-time").innerHTML = minutes_secs;
+        };
+        
         
         //timer reaches 0
-        if(timeleft <= 0){
+        if(time_in_sec <= 0){
             clearInterval(downloadTimer);
+            clearInterval(pauseTimer);
+            icon_rest_over();
         }
     }, 1000);
 };
@@ -132,14 +137,25 @@ function icon_blink(){
         let n = 0;
         browser.browserAction.setIcon({path: "../icon/pomodoro_hot.png"});
 
-        while(n<3){
-            n++;
+        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_hot_rechts.png"}); }, 1000);
+        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_hot_unten.png"}); }, 2000);
+        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_hot_links.png"}); }, 3000);
+        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_hot.png"}); }, 4000);
 
-            setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_hot_rechts.png"}); }, 1000);
-            setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_hot_unten.png"}); }, 2000);
-            setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_hot_links.png"}); }, 3000);
-            setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_hot.png"}); }, 4000);
-        };
+    });
+};
+
+function icon_rest_over(){
+    browser.tabs.query({currentWindow: true, active: true})
+    .then((tabs) => {
+        let n = 0;
+        browser.browserAction.setIcon({path: "../icon/pomodoro_gruen.png"});
+        
+        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_gruen_rechts.png"}); }, 1000);
+        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_gruen_unten.png"}); }, 2000);
+        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_gruen_links.png"}); }, 3000);
+        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_gruen.png"}); }, 4000);
+
     });
 };
 

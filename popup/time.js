@@ -74,7 +74,8 @@ function display_calendar(){
         color = gradient_colors[color_index]
         
         //entries += "<div>"+ color +"</div>";
-        entries += "<div class='color"+color_index+"'></div>";
+        var day = parseInt(i)+1;
+        entries += "<div class='color"+color_index+"'><span class='tooltip-text'>"+ day + "." + num_month[month] + "</br>"+ monthly_count[i] + " Pomodoros" +"</span></div>";
         
     };
 

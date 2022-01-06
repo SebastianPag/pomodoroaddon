@@ -111,13 +111,32 @@ button, input[type="submit"], input[type="reset"] {
 
   #grid-container > div { 
     font-size: smaller;
-    opacity: 0.8;
     margin: 2px; 
     border-radius: 4px;
     text-align: center;
     vertical-align: middle;
     box-shadow: 1px 1px 1px 1px black;
+    position: relative;
   } 
+
+  .tooltip-text{
+    visibility: hidden;
+  }
+
+  div:hover > .tooltip-text{
+    visibility: visible;
+    background-color: black;
+    opacity: 0.8;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+    padding: 2px 2px;
+    border-radius: 6px;
+    position: absolute;
+    top: -30px;
+    width: 150px;
+    z-index: 1;
+  }
 
   #display-date{
     position: absolute;
