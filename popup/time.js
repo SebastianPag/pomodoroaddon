@@ -75,8 +75,7 @@ function display_calendar(){
         
         //entries += "<div>"+ color +"</div>";
         var day = parseInt(i)+1;
-        entries += "<div class='color"+color_index+"'><span class='tooltip-text'>"+ day + "." + num_month[month] + "</br>"+ monthly_count[i] + " Pomodoros" +"</span></div>";
-        
+        entries += "<div class='color"+color_index+"'><span class='tooltip-text'>"+ day + ". " + num_month[month] + "</br>"+ monthly_count[i] + " Pomodoros" +"</span></div>";
     };
 
     document.getElementById("display-date").innerHTML = num_month[month] + " " + year;
