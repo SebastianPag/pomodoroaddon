@@ -23,6 +23,11 @@ button, input[type="submit"], input[type="reset"] {
 	outline: inherit;
 }
 
+#increase-focus, #decrease-focus{
+  position: relative;
+  left: 0;
+}
+
 .time-setting{
   display: flex;
   flex-wrap: nowrap;
@@ -37,9 +42,9 @@ button, input[type="submit"], input[type="reset"] {
 }
 
 .time-setting div{
-  font-size: 20px;
+  font-size: 15px;
   color: rgb(158, 158, 158);
-  width: 25%;
+  width: 20%;
   vertical-align: text-bottom;
   position: relative;
 }
@@ -95,7 +100,7 @@ button, input[type="submit"], input[type="reset"] {
   width: 50px;
   text-align: center;
   vertical-align: middle;
-  line-height: 228px; /*Equal to container height*/
+  line-height: 212px; /*Equal to container height*/
   color:white;
   font-size: 30px;
 }
@@ -103,7 +108,7 @@ button, input[type="submit"], input[type="reset"] {
 #grid-container { 
     display: grid; 
     width: 150px;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 20px;
     grid-template-columns: 20% 20% 20% 20% 20%;  
     grid-template-rows: 30px 30px 30px 30px 30px 30px 30px;   

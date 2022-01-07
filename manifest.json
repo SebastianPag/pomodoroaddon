@@ -11,7 +11,7 @@
     },
       
     "background": {
-      "scripts": ["background.js"]
+      "scripts": ["popup/pomodoro-control.js", "popup/time.js"]
     },
 
     "permissions": [

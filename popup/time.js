@@ -19,7 +19,6 @@ function binValues(counts){
         case 4:
             return bins.concat([0,min+1, min+2, min+3, max]);
         default:
-            console.log("default");
             return bins.concat([0,Math.ceil(min+bin_width), Math.ceil(min+2*bin_width),Math.ceil(min+3*bin_width), Math.ceil(min+4*bin_width), max]);
     };
 
@@ -39,13 +38,12 @@ function find_bin(val, bins){
         }
     };
 
-    console.log(val, bins);
 }
 
 
 function get_prev_month_year(){
-    if(month == 0){
-        month = 11;
+    if(month == 1){
+        month = 12;
         year --;
     }
     else{
@@ -55,8 +53,8 @@ function get_prev_month_year(){
 };
 
 function get_next_month_year(){
-    if(month == 11){
-        month = 0;
+    if(month == 12){
+        month = 1;
         year ++;
     }
     else{
@@ -66,9 +64,6 @@ function get_next_month_year(){
 };
 
 function display_calendar(){
-    console.log(month, year);
-
-    console.log("Days", daysInMonth);
     for (let i = 0; i < daysInMonth; i++){
         color_index = find_bin(monthly_count[i], bins);
         color = gradient_colors[color_index]
@@ -81,45 +76,11 @@ function display_calendar(){
     document.getElementById("display-date").innerHTML = num_month[month] + " " + year;
 };
 
-//update calendar
-document.getElementById("left-arrow").addEventListener("click", function(){
-    //contains divs for calendar
-    entries = "";
-
-    var previous_month = get_prev_month_year();
-    daysInMonth = new Date(previous_month[1], previous_month[0], 0).getDate();
-    console.log(daysInMonth);
-
-    monthly_count = Array.from({length: daysInMonth}, () => Math.floor(Math.random() * 40));
-    bins = binValues(monthly_count);
-
-    display_calendar();
-    document.getElementById("grid-container").innerHTML = entries;
-
-});
-
-document.getElementById("right-arrow").addEventListener("click", function(){
-    //contains divs for calendar
-    entries = "";
-
-    var previous_month = get_next_month_year();
-    daysInMonth = new Date(previous_month[1], previous_month[0], 0).getDate();
-    console.log(daysInMonth);
-
-    monthly_count = Array.from({length: daysInMonth}, () => Math.floor(Math.random() * 40));
-    bins = binValues(monthly_count);
-
-    display_calendar();
-    document.getElementById("grid-container").innerHTML = entries;
-
-});
-
-
 //universal
-var num_month = {"0": "January", "1": "Feburary", "2": "March", "3": "April", "4": "May", "5": "June", "6": "July", "7": "August", "8": "September", "9": "October", "10": "November", "11": "December"};
+var num_month = {"1": "January", "2": "Feburary", "3": "March", "4": "April", "5": "May", "6": "June", "7": "July", "8": "August", "9": "September", "10": "October", "11": "November", "12": "December"};
 //date info
 var dt = new Date();
-var month = dt.getMonth();
+var month = dt.getMonth()+1;
 var year = dt.getFullYear();
 
 //gradient colors
@@ -129,7 +90,7 @@ daysInMonth = new Date(year, month, 0).getDate();
 
 var entries = "";
 var pomodoro_count = {
-    "0-2022": Array.from({length: 31}, () => Math.floor(Math.random() * 40))
+    "1-2022": Array.from({length: 31}, () => Math.floor(Math.random() * 40))
 };
 
 //get pomodoro counts for month
@@ -140,5 +101,46 @@ var monthly_count = pomodoro_count[query_string].concat(Array(daysInMonth-num_en
 
 
 var bins = binValues(monthly_count);
-display_calendar();
-document.getElementById("grid-container").innerHTML = entries;
+
+
+//check if popup is opened
+var windows = browser.extension.getViews({type: "popup"});
+//if popup is open:
+if(windows.length == 1){
+    display_calendar();
+    document.getElementById("grid-container").innerHTML = entries;
+
+    //update calendar left button
+    document.getElementById("left-arrow").addEventListener("click", function(){
+        //contains divs for calendar
+        entries = "";
+    
+        var previous_month = get_prev_month_year();
+    
+        daysInMonth = new Date(previous_month[1], previous_month[0], 0).getDate();
+    
+        monthly_count = Array.from({length: daysInMonth}, () => Math.floor(Math.random() * 40));
+        bins = binValues(monthly_count);
+    
+        display_calendar();
+        document.getElementById("grid-container").innerHTML = entries;
+    
+    });
+
+    //update calendar right button
+    document.getElementById("right-arrow").addEventListener("click", function(){
+        //contains divs for calendar
+        entries = "";
+    
+        var previous_month = get_next_month_year();
+    
+        daysInMonth = new Date(previous_month[1], previous_month[0], 0).getDate();
+    
+        monthly_count = Array.from({length: daysInMonth}, () => Math.floor(Math.random() * 40));
+        bins = binValues(monthly_count);
+    
+        display_calendar();
+        document.getElementById("grid-container").innerHTML = entries;
+    
+    });
+}
