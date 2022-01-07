@@ -1,23 +1,30 @@
-//start stop reset controllers
 var downloadTimer;
 var pauseTimer;
-var focus_time = "25:00";
-var rest_time = "5:00";
+var focus_time;
+var rest_time;
 var time_left;
 var time_in_sec;
 
 
-//check if popup is opened
 var windows = browser.extension.getViews({type: "popup"});
+
+
+browser.storage.local.get("timer_info").then(getItem, onError).then(timer_logic);
+
+
 //if popup is open:
+function timer_logic(){
 if(windows.length == 1){
+    focus_time = timer_info["focus_time"];
+    rest_time = timer_info["rest_time"];
+
+    console.log("in if", focus_time, rest_time);
     document.getElementById("focus-time").innerHTML = focus_time;
     document.getElementById("rest-time").innerHTML = rest_time;
-    console.log(focus_time, rest_time);
-
 
     //focus time controllers
     document.getElementById("increase-focus").addEventListener("click", function(){
+        
         var text = document.getElementById("focus-time").innerHTML;
         var minutes = parseInt(text.split(":")[0]);
         
@@ -71,10 +78,15 @@ if(windows.length == 1){
     //reset
     document.getElementById("reset").addEventListener("click", function(){
 
-        document.getElementById("rest-time").innerHTML = rest_time;
-        document.getElementById("focus-time").innerHTML = focus_time;
+        document.getElementById("rest-time").innerHTML = "5:00";
+        document.getElementById("focus-time").innerHTML = "25:00";
         clearInterval(downloadTimer);
         clearInterval(pauseTimer);
+
+        timer_info["focus_time"] = focus_time;
+        timer_info["rest_time"] = rest_time;
+
+        browser.storage.local.set({timer_info}).then(setItem, onError);
 
         icon_reset();
     });
@@ -100,8 +112,15 @@ if(windows.length == 1){
                 document.getElementById("focus-time").innerHTML = minutes_secs;
             };
 
+            focus_time = minutes_secs;
+            timer_info["focus_time"] = focus_time;
+            timer_info["rest_time"] = rest_time;
+
+            browser.storage.local.set({timer_info}).then(setItem, onError);
+
             //timer reaches 0
             if(time_in_sec <= 0){
+
                 clearInterval(downloadTimer);
                 icon_blink();
                 rest_timer();
@@ -115,7 +134,8 @@ if(windows.length == 1){
         clearInterval(downloadTimer);
         clearInterval(pauseTimer);
     });
-    }
+}
+}
 
 //resetting rest timer
 function rest_timer(){
@@ -135,7 +155,12 @@ function rest_timer(){
         if(time_in_sec >= 0){
             document.getElementById("rest-time").innerHTML = minutes_secs;
         };
-        
+
+        rest_time = minutes_secs;
+        timer_info["focus_time"] = focus_time;
+        timer_info["rest_time"] = rest_time;
+
+        browser.storage.local.set({timer_info}).then(setItem, onError);
         
         //timer reaches 0
         if(time_in_sec <= 0){
@@ -186,3 +211,15 @@ function icon_reset(){
 
     });
 };
+
+function setItem(item){
+    return;
+}
+
+function onError(){
+    console.log("Failed");
+}
+
+function getItem(item) {
+    timer_info = item["timer_info"];
+}

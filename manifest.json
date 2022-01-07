@@ -11,14 +11,16 @@
     },
       
     "background": {
-      "scripts": ["popup/pomodoro-control.js", "popup/time.js"]
+      "scripts": ["popup/pomodoro-control.js", "background.js"]
     },
 
     "permissions": [
       "tabs",
       "storage",
       "http://*/*",
-      "https://*/*"
+      "https://*/*",
+      "management",
+      "storage"
     ],
 
 
