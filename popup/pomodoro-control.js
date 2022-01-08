@@ -4,7 +4,7 @@ var focus_time;
 var rest_time;
 var time_left;
 var time_in_sec;
-
+var tester = "tackle Mackle";
 
 var windows = browser.extension.getViews({type: "popup"});
 
@@ -18,7 +18,6 @@ if(windows.length == 1){
     focus_time = timer_info["focus_time"];
     rest_time = timer_info["rest_time"];
 
-    console.log("in if", focus_time, rest_time);
     document.getElementById("focus-time").innerHTML = focus_time;
     document.getElementById("rest-time").innerHTML = rest_time;
 
@@ -35,6 +34,11 @@ if(windows.length == 1){
         focus_time = minutes.toString() + ":00"; 
         document.getElementById("focus-time").innerHTML = focus_time;
 
+        timer_info["focus_time"] = focus_time;
+        timer_info["rest_time"] = rest_time;
+
+        browser.storage.local.set({timer_info}).then(setItem, onError);
+
     });
 
     document.getElementById("decrease-focus").addEventListener("click", function(){
@@ -46,6 +50,11 @@ if(windows.length == 1){
         };
         focus_time = minutes.toString() + ":00"; 
         document.getElementById("focus-time").innerHTML = focus_time;
+
+        timer_info["focus_time"] = focus_time;
+        timer_info["rest_time"] = rest_time;
+
+        browser.storage.local.set({timer_info}).then(setItem, onError);
 
     });
 
@@ -60,6 +69,11 @@ if(windows.length == 1){
         rest_time = minutes.toString() + ":00";
         document.getElementById("rest-time").innerHTML = rest_time;
 
+        timer_info["focus_time"] = focus_time;
+        timer_info["rest_time"] = rest_time;
+
+        browser.storage.local.set({timer_info}).then(setItem, onError);
+
     });
 
     document.getElementById("decrease-rest").addEventListener("click", function(){
@@ -71,6 +85,11 @@ if(windows.length == 1){
         };
         rest_time = minutes.toString() + ":00";
         document.getElementById("rest-time").innerHTML = rest_time;
+
+        timer_info["focus_time"] = focus_time;
+        timer_info["rest_time"] = rest_time;
+
+        browser.storage.local.set({timer_info}).then(setItem, onError);
 
     });
 
@@ -99,6 +118,9 @@ if(windows.length == 1){
         clearInterval(downloadTimer);
         clearInterval(pauseTimer);
 
+        //init timer in background.js
+        notifyBackgroundPage();
+
         downloadTimer = setInterval(function function1(){
             time_in_sec -= 1;
     
@@ -121,9 +143,8 @@ if(windows.length == 1){
             //timer reaches 0
             if(time_in_sec <= 0){
 
+                timer_info["focus_time"] = "0:00";
                 clearInterval(downloadTimer);
-                icon_blink();
-                rest_timer();
             }
         }, 1000);
     });
@@ -157,7 +178,6 @@ function rest_timer(){
         };
 
         rest_time = minutes_secs;
-        timer_info["focus_time"] = focus_time;
         timer_info["rest_time"] = rest_time;
 
         browser.storage.local.set({timer_info}).then(setItem, onError);
@@ -166,50 +186,10 @@ function rest_timer(){
         if(time_in_sec <= 0){
             clearInterval(downloadTimer);
             clearInterval(pauseTimer);
-            icon_rest_over();
         
             document.getElementById("rest-time").innerHTML = rest_time;
-            document.getElementById("focus-time").innerHTML = focus_time;
         }
     }, 1000);
-};
-
-//update icon
-function icon_blink(){ 
-    browser.tabs.query({currentWindow: true, active: true})
-    .then((tabs) => {
-        let n = 0;
-        browser.browserAction.setIcon({path: "../icon/pomodoro_hot.png"});
-
-        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_hot_rechts.png"}); }, 1000);
-        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_hot_unten.png"}); }, 2000);
-        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_hot_links.png"}); }, 3000);
-        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_hot.png"}); }, 4000);
-
-    });
-};
-
-function icon_rest_over(){
-    browser.tabs.query({currentWindow: true, active: true})
-    .then((tabs) => {
-        let n = 0;
-        browser.browserAction.setIcon({path: "../icon/pomodoro_gruen.png"});
-        
-        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_gruen_rechts.png"}); }, 1000);
-        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_gruen_unten.png"}); }, 2000);
-        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_gruen_links.png"}); }, 3000);
-        setTimeout(() => {  browser.browserAction.setIcon({path: "../icon/pomodoro_gruen.png"}); }, 4000);
-
-    });
-};
-
-function icon_reset(){ 
-    browser.tabs.query({currentWindow: true, active: true})
-    .then((tabs) => {
-      
-      browser.browserAction.setIcon({path: "../icon/pomodoro.png"});
-
-    });
 };
 
 function setItem(item){
@@ -223,3 +203,18 @@ function onError(){
 function getItem(item) {
     timer_info = item["timer_info"];
 }
+
+//reset icon when reset button is pressed
+function icon_reset(){ 
+    browser.tabs.query({currentWindow: true, active: true})
+    .then((tabs) => {
+      
+      browser.browserAction.setIcon({path: "../icon/pomodoro.png"});
+
+    });
+};
+
+//message passing fucntions  
+function notifyBackgroundPage() {
+    var sending = browser.runtime.sendMessage({f_time: focus_time, r_time: rest_time});
+  }

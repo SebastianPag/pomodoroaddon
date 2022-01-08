@@ -90,7 +90,7 @@ daysInMonth = new Date(year, month, 0).getDate();
 
 var entries = "";
 var pomodoro_count = {
-    "1-2022": Array.from({length: 31}, () => Math.floor(Math.random() * 40))
+    "1-2022": Array.from({length: 31}, () => Math.floor(Math.random() * 10))
 };
 
 //get pomodoro counts for month
@@ -104,7 +104,7 @@ var bins = binValues(monthly_count);
 
 
 //check if popup is opened
-var windows = browser.extension.getViews({type: "popup"});
+windows = browser.extension.getViews({type: "popup"});
 //if popup is open:
 if(windows.length == 1){
     display_calendar();
@@ -119,7 +119,7 @@ if(windows.length == 1){
     
         daysInMonth = new Date(previous_month[1], previous_month[0], 0).getDate();
     
-        monthly_count = Array.from({length: daysInMonth}, () => Math.floor(Math.random() * 40));
+        monthly_count = Array.from({length: daysInMonth}, () => Math.floor(Math.random() * 10));
         bins = binValues(monthly_count);
     
         display_calendar();
@@ -136,7 +136,7 @@ if(windows.length == 1){
     
         daysInMonth = new Date(previous_month[1], previous_month[0], 0).getDate();
     
-        monthly_count = Array.from({length: daysInMonth}, () => Math.floor(Math.random() * 40));
+        monthly_count = Array.from({length: daysInMonth}, () => Math.floor(Math.random() * 10));
         bins = binValues(monthly_count);
     
         display_calendar();
