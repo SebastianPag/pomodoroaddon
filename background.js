@@ -7,6 +7,10 @@ var background_r_time;
 var background_f_time_split;
 var background_r_time_split;
 var time_left;
+var pomodoro_count;
+var pomodoro_time;
+var key;
+
 //universal
 var num_month = {"1": "January", "2": "Feburary", "3": "March", "4": "April", "5": "May", "6": "June", "7": "July", "8": "August", "9": "September", "10": "October", "11": "November", "12": "December"};
 
@@ -19,6 +23,10 @@ function setItemPomodoro(){
     console.log("Stored Initial PomodoroCount");
 }
 
+function setPomodoro() {
+    return 0;
+}
+
 function setItem(){
     return 0;
 }
@@ -29,6 +37,10 @@ function onError(){
 
 function getItem(item) {
     test_timer = item["timer_info"];
+}
+
+function getPomodoro(item) {
+    pomodoro_count = item["pomodoro_count"];
 }
 
 function check_poup(){
@@ -51,7 +63,6 @@ browser.management.onInstalled.addListener((info) => {
     var year = dt.getFullYear();
     var days = new Date(year, month, 0).getDate();
     var key = month + "-" + year;
-    console.log(dt, month, year, days);
 
     var pomodoro_count = {}
     pomodoro_count[key] = Array.from({length: days}, () => 0);
@@ -84,6 +95,8 @@ function background_timer(){
     background_r_time = test_timer.rest_time;
     timer_info.rest_time = background_r_time;
 
+
+    browser.storage.local.get("pomodoro_count").then(getPomodoro, onError);
     background_f_time_split = background_f_time.split(":");
     time_left = parseInt(background_f_time_split[0]) * 60 + parseInt(background_f_time_split[1]);
 
@@ -104,6 +117,16 @@ function background_timer(){
 
         //timer reaches 0
         if(time_left <= 0){
+            var dt = new Date();
+            var month = dt.getMonth()+1;
+            var year = dt.getFullYear();
+            var day = parseInt(dt.toString().split(" ")[2]);
+            var key = month + "-" + year;
+    
+            var key_values = pomodoro_count[key];
+            key_values[day-1] += 1;
+            pomodoro_count[key] = key_values;
+            browser.storage.local.set({pomodoro_count}).then(setPomodoro, onError);
 
             background_f_time = "0:00";
             timer_info.focus_time = "0:00";

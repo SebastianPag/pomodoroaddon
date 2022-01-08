@@ -97,7 +97,7 @@ function onError(e) {
 var num_month = {"1": "January", "2": "Feburary", "3": "March", "4": "April", "5": "May", "6": "June", "7": "July", "8": "August", "9": "September", "10": "October", "11": "November", "12": "December"};
 
 //gradient colors
-var gradient_colors = ["#BDE724", "#83AF00", "#4A7B00", "#054900", "#001D00", "#000000"].reverse();
+var gradient_colors = ["#BDE724", "#83AF00", "#4A7B00", "#054900", "#001D00", "#5A636A"].reverse();
 var entries = "";
 
 
