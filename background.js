@@ -1,6 +1,6 @@
 var test_timer;
 var timer_listener;
-var test_interval;
+var test_interval = null;
 var test_rest;
 var background_f_time;
 var background_r_time;
@@ -9,8 +9,12 @@ var background_r_time_split;
 var time_left;
 
 //set initial values for storage
-function setItem(){
+function setItemInit(){
     console.log("Stored Initial Values");
+}
+
+function setItem(){
+    return 0;
 }
 
 function onError(){
@@ -22,6 +26,10 @@ function getItem(item) {
     console.log(item);
 }
 
+function check_poup(){
+    return browser.extension.getViews({type: "popup"});
+}
+
 var timer_info = {
     focus_time: "25:00",
     rest_time: "5:00"
@@ -29,18 +37,34 @@ var timer_info = {
 
 browser.management.onInstalled.addListener((info) => {
     console.log(info.name + " was installed");
-    browser.storage.local.set({timer_info}).then(setItem, onError);
+    browser.storage.local.set({timer_info}).then(setItemInit, onError);
 });
 
 
 function handleMessage(message) {
-    browser.storage.local.get("timer_info").then(getItem, onError).then(background_timer); 
+    if(message.mode == "reset"){
+        clearInterval(test_interval);
+        clearInterval(test_rest);
+        test_interval = null;
+        timer_info.focus_time = "25:00";
+        timer_info.rest_time = "5:00";
+        browser.storage.local.set({timer_info}).then(setItem, onError)
+    }
+    else if(message.mode == "stop"){
+        clearInterval(test_interval);
+        clearInterval(test_rest);
+        test_interval = null;
+        
+    }
+    else if(test_interval == null){
+        browser.storage.local.get("timer_info").then(getItem, onError).then(background_timer);
+    }
 }
 
 function background_timer(){
     background_f_time = test_timer.focus_time;
     background_r_time = test_timer.rest_time;
-    console.log(background_f_time, background_r_time);
+    timer_info.rest_time = background_r_time;
 
     background_f_time_split = background_f_time.split(":");
     time_left = parseInt(background_f_time_split[0]) * 60 + parseInt(background_f_time_split[1]);
@@ -56,11 +80,9 @@ function background_timer(){
         var minutes_secs = Math.floor(time_left/60).toString() + ":" + secs.toString();
 
         background_f_time = minutes_secs;
-        console.log(background_f_time, background_r_time);
-
-        //save values for local storage
+        //save values for local storage and send time message to pomodoro-control.js
         timer_info.focus_time = background_f_time;
-        browser.storage.local.set({timer_info}).then(setItem, onError);
+        browser.storage.local.set({timer_info}).then(setItem, onError).then(send_time);
 
         //timer reaches 0
         if(time_left <= 0){
@@ -95,8 +117,7 @@ function rest_timer(){
 
         //save values for local storage
         timer_info.rest_time = background_r_time;
-        console.log(background_f_time, background_r_time);
-        browser.storage.local.set({timer_info}).then(setItem, onError);
+        browser.storage.local.set({timer_info}).then(setItem, onError).then(send_time);
         
         //timer reaches 0
         if(time_left <= 0){
@@ -111,7 +132,6 @@ function rest_timer(){
     }, 1000);
 };
   
-
 //update icon
 function icon_blink(){ 
     browser.tabs.query({currentWindow: true, active: true})
@@ -140,6 +160,13 @@ function icon_rest_over(){
 
     });
 };
+
+function send_time() {
+    if(check_poup().length == 1){
+        console.log("send_time", background_f_time, background_r_time);
+        browser.runtime.sendMessage({f_time: background_f_time, r_time: background_r_time, mode: "0"});
+    }
+}
 
 browser.runtime.onMessage.addListener(handleMessage);
 

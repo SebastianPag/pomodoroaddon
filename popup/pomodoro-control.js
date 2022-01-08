@@ -99,14 +99,13 @@ if(windows.length == 1){
 
         document.getElementById("rest-time").innerHTML = "5:00";
         document.getElementById("focus-time").innerHTML = "25:00";
-        clearInterval(downloadTimer);
-        clearInterval(pauseTimer);
 
         timer_info["focus_time"] = focus_time;
         timer_info["rest_time"] = rest_time;
 
         browser.storage.local.set({timer_info}).then(setItem, onError);
-
+        
+        notifyBackgroundPage("reset");
         icon_reset();
     });
 
@@ -115,45 +114,14 @@ if(windows.length == 1){
     document.getElementById("start").addEventListener("click", function(){
         timeleft = document.getElementById("focus-time").innerHTML.split(":");
         time_in_sec = parseInt(timeleft[0]) * 60 + parseInt(timeleft[1]);
-        clearInterval(downloadTimer);
-        clearInterval(pauseTimer);
-
         //init timer in background.js
-        notifyBackgroundPage();
-
-        downloadTimer = setInterval(function function1(){
-            time_in_sec -= 1;
-    
-            var secs = parseInt(time_in_sec%60);
-            if(secs < 10){
-                secs = "0" + secs.toString();
-            };
-
-            var minutes_secs = Math.floor(time_in_sec/60).toString() + ":" + secs.toString();
-            if(time_in_sec >= 0){
-                document.getElementById("focus-time").innerHTML = minutes_secs;
-            };
-
-            focus_time = minutes_secs;
-            timer_info["focus_time"] = focus_time;
-            timer_info["rest_time"] = rest_time;
-
-            browser.storage.local.set({timer_info}).then(setItem, onError);
-
-            //timer reaches 0
-            if(time_in_sec <= 0){
-
-                timer_info["focus_time"] = "0:00";
-                clearInterval(downloadTimer);
-            }
-        }, 1000);
+        notifyBackgroundPage("start");
     });
 
 
     //halt
     document.getElementById("stop").addEventListener("click", function(){
-        clearInterval(downloadTimer);
-        clearInterval(pauseTimer);
+        notifyBackgroundPage("stop");
     });
 }
 }
@@ -163,33 +131,7 @@ function rest_timer(){
     timeleft = document.getElementById("rest-time").innerHTML.split(":");
     time_in_sec = parseInt(timeleft[0]) * 60 + parseInt(timeleft[1]);
 
-    pauseTimer = setInterval(function function1(){
-
-        time_in_sec -= 1;
-
-        var secs = parseInt(time_in_sec%60);
-        if(secs < 10){
-            secs = "0" + secs.toString();
-        };
-
-        var minutes_secs = Math.floor(time_in_sec/60).toString() + ":" + secs.toString();
-        if(time_in_sec >= 0){
-            document.getElementById("rest-time").innerHTML = minutes_secs;
-        };
-
-        rest_time = minutes_secs;
-        timer_info["rest_time"] = rest_time;
-
-        browser.storage.local.set({timer_info}).then(setItem, onError);
-        
-        //timer reaches 0
-        if(time_in_sec <= 0){
-            clearInterval(downloadTimer);
-            clearInterval(pauseTimer);
-        
-            document.getElementById("rest-time").innerHTML = rest_time;
-        }
-    }, 1000);
+    notifyBackgroundPage("rest");
 };
 
 function setItem(item){
@@ -201,6 +143,7 @@ function onError(){
 }
 
 function getItem(item) {
+    console.log("getItem", item);
     timer_info = item["timer_info"];
 }
 
@@ -215,6 +158,30 @@ function icon_reset(){
 };
 
 //message passing fucntions  
-function notifyBackgroundPage() {
-    var sending = browser.runtime.sendMessage({f_time: focus_time, r_time: rest_time});
+function notifyBackgroundPage(source) {
+    if(source == "reset"){
+        browser.runtime.sendMessage({mode: "reset"});
+    }
+    else if(source == "stop"){
+        browser.runtime.sendMessage({mode: "stop"});
+    } 
+    else{
+        browser.runtime.sendMessage({f_time: focus_time, r_time: rest_time, mode: "no"});
+        console.log("notify_background" ,focus_time, rest_time);
+    }
+
   }
+
+function handleTime(message){
+    update_focus_timer(message);
+}
+
+function update_focus_timer(message) {
+    console.log("update_focus_timer", message);
+    if(message.mode == "0"){
+        document.getElementById("focus-time").innerHTML = message.f_time;
+        document.getElementById("rest-time").innerHTML = message.r_time;
+    }    
+}
+
+browser.runtime.onMessage.addListener(handleTime);
