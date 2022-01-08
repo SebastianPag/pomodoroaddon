@@ -143,7 +143,6 @@ function onError(){
 }
 
 function getItem(item) {
-    console.log("getItem", item);
     timer_info = item["timer_info"];
 }
 
@@ -167,7 +166,6 @@ function notifyBackgroundPage(source) {
     } 
     else{
         browser.runtime.sendMessage({f_time: focus_time, r_time: rest_time, mode: "no"});
-        console.log("notify_background" ,focus_time, rest_time);
     }
 
   }
@@ -177,7 +175,6 @@ function handleTime(message){
 }
 
 function update_focus_timer(message) {
-    console.log("update_focus_timer", message);
     if(message.mode == "0"){
         document.getElementById("focus-time").innerHTML = message.f_time;
         document.getElementById("rest-time").innerHTML = message.r_time;

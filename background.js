@@ -7,6 +7,8 @@ var background_r_time;
 var background_f_time_split;
 var background_r_time_split;
 var time_left;
+//universal
+var num_month = {"1": "January", "2": "Feburary", "3": "March", "4": "April", "5": "May", "6": "June", "7": "July", "8": "August", "9": "September", "10": "October", "11": "November", "12": "December"};
 
 //set initial values for storage
 function setItemInit(){
@@ -23,7 +25,6 @@ function onError(){
 
 function getItem(item) {
     test_timer = item["timer_info"];
-    console.log(item);
 }
 
 function check_poup(){
@@ -35,9 +36,19 @@ var timer_info = {
     rest_time: "5:00"
 }
 
+
 browser.management.onInstalled.addListener((info) => {
     console.log(info.name + " was installed");
     browser.storage.local.set({timer_info}).then(setItemInit, onError);
+
+    //date info
+    var dt = new Date();
+    var month = dt.getMonth()+1;
+    var year = dt.getFullYear();
+
+    var pomodoro_count = {
+    
+    }
 });
 
 
@@ -87,6 +98,7 @@ function background_timer(){
         //timer reaches 0
         if(time_left <= 0){
 
+            background_f_time = "0:00";
             timer_info.focus_time = "0:00";
             timer_info.rest_time = background_r_time;
             browser.storage.local.set({timer_info}).then(setItem, onError);
@@ -114,6 +126,7 @@ function rest_timer(){
 
         var minutes_secs = Math.floor(time_left/60).toString() + ":" + secs.toString();
         background_r_time = minutes_secs;
+
 
         //save values for local storage
         timer_info.rest_time = background_r_time;
@@ -163,7 +176,6 @@ function icon_rest_over(){
 
 function send_time() {
     if(check_poup().length == 1){
-        console.log("send_time", background_f_time, background_r_time);
         browser.runtime.sendMessage({f_time: background_f_time, r_time: background_r_time, mode: "0"});
     }
 }
