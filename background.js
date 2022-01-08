@@ -15,6 +15,10 @@ function setItemInit(){
     console.log("Stored Initial Values");
 }
 
+function setItemPomodoro(){
+    console.log("Stored Initial PomodoroCount");
+}
+
 function setItem(){
     return 0;
 }
@@ -45,10 +49,13 @@ browser.management.onInstalled.addListener((info) => {
     var dt = new Date();
     var month = dt.getMonth()+1;
     var year = dt.getFullYear();
+    var days = new Date(year, month, 0).getDate();
+    var key = month + "-" + year;
+    console.log(dt, month, year, days);
 
-    var pomodoro_count = {
-    
-    }
+    var pomodoro_count = {}
+    pomodoro_count[key] = Array.from({length: days}, () => 0);
+    browser.storage.local.set({pomodoro_count}).then(setItemPomodoro, onError);
 });
 
 
