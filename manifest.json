@@ -2,12 +2,11 @@
 
     "manifest_version": 2,
     "name": "Pomodoro",
-    "version": "1.0",
+    "version": "1.0.1",
     "description": "personalized Pomodoro tracker",
   
     "icons": {
-      "48": "icon/pomodoro.png",
-      "96": "icon/pomodoro.png"
+      "48": "icon/pomodoro.png"
     },
       
     "background": {
@@ -17,10 +16,7 @@
     "permissions": [
       "tabs",
       "storage",
-      "http://*/*",
-      "https://*/*",
-      "management",
-      "storage"
+      "management"
     ],
 
 

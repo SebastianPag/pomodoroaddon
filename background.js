@@ -91,6 +91,12 @@ function handleMessage(message) {
 }
 
 function background_timer(){
+    timer_info = {
+        focus_time: "25:00",
+        rest_time: "5:00"
+    };
+    
+
     background_f_time = test_timer.focus_time;
     background_r_time = test_timer.rest_time;
     timer_info.rest_time = background_r_time;

@@ -45,7 +45,7 @@ if(windows.length == 1){
         var text = document.getElementById("focus-time").innerHTML;
         var minutes = parseInt(text.split(":")[0]);
         
-        if(minutes > 0){
+        if(minutes > 1){
             minutes--;
         };
         focus_time = minutes.toString() + ":00"; 
@@ -100,8 +100,8 @@ if(windows.length == 1){
         document.getElementById("rest-time").innerHTML = "5:00";
         document.getElementById("focus-time").innerHTML = "25:00";
 
-        timer_info["focus_time"] = focus_time;
-        timer_info["rest_time"] = rest_time;
+        timer_info["focus_time"] = "25:00";
+        timer_info["rest_time"] = "5:00";
 
         browser.storage.local.set({timer_info}).then(setItem, onError);
         
