@@ -5,4 +5,4 @@ displays history in a github inspired style.
 Uses only local storage to date, so history will be lost if
 local storage is deleted!
 
-![addon layout](readme_content/pomodoro-layout.png)
+<img src="readme_content/pomodoro-layout.png" alt="drawing" width="200"/>
