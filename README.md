@@ -14,5 +14,5 @@ On the right is the rest time in between pomodoros, which is also
 changed via the corresponding <b>+</b> and <b>-</b> buttons.
 
 When the pomodoro time is over, the addon icon <img src="readme_content/icon_off.png" alt="drawing" width="20"/>
-will turn red and start to rotate
+will turn red and start to rotate <br />
 <img src="readme_content/icon_red.png" alt="drawing"/><img src="readme_content/icon_red_right.png" alt="drawing"/><img src="readme_content/icon_red_bottom.png" alt="drawing"/><img src="readme_content/icon_red_left.png" alt="drawing"/>
