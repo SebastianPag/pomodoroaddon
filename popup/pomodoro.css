@@ -132,7 +132,7 @@ button, input[type="submit"], input[type="reset"] {
   div:hover > .tooltip-text{
     visibility: visible;
     background-color: black;
-    opacity: 0.8;
+    opacity: 0.9;
     overflow: hidden;
     color: #fff;
     text-align: center;

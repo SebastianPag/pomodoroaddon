@@ -65,7 +65,7 @@ browser.management.onInstalled.addListener((info) => {
     var key = month + "-" + year;
 
     var pomodoro_count = {}
-    pomodoro_count[key] = Array.from({length: days}, () => 0);
+    pomodoro_count[key] = Array.from({length: days}, () => Math.floor(Math.random() * 10));
     browser.storage.local.set({pomodoro_count}).then(setItemPomodoro, onError);
 });
 
