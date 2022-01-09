@@ -15,4 +15,9 @@ changed via the corresponding <b>+</b> and <b>-</b> buttons.
 
 When the pomodoro time is over, the addon icon <img src="readme_content/icon_off.png" alt="drawing" width="20"/>
 will turn red and start to rotate <br />
-<img src="readme_content/icon_red.png" alt="drawing"/><img src="readme_content/icon_red_right.png" alt="drawing"/><img src="readme_content/icon_red_bottom.png" alt="drawing"/><img src="readme_content/icon_red_left.png" alt="drawing"/>
+<img src="readme_content/icon_red.png" alt="drawing"/> &rarr; <img src="readme_content/icon_red_right.png" alt="drawing"/> &rarr; <img src="readme_content/icon_red_bottom.png" alt="drawing"/> &rarr; <img src="readme_content/icon_red_left.png" alt="drawing"/>
+<br />
+
+When the rest time is over, the addon icon changes colors to green.
+<img src="readme_content/icon_green.png" alt="drawing"/> &rarr; <img src="readme_content/icon_green_right.png" alt="drawing"/> &rarr; <img src="readme_content/icon_green_bottom.png" alt="drawing"/> &rarr; <img src="readme_content/icon_green_left.png" alt="drawing"/>
+<br />
